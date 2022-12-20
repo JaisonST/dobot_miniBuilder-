@@ -8,7 +8,7 @@ class Motion():
     def __init__(self):
         available_ports = list_ports.comports()
         print(f'available ports: {[x.device for x in available_ports]}')
-        port = available_ports[3].device
+        port = available_ports[0].device
 
         self.device = Dobot(port=port, verbose=True)
         (self.home_x, self.home_y, self.home_z, self.home_r, j1, j2, j3, j4) = self.device.pose()

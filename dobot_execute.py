@@ -11,29 +11,28 @@
 #000
 #111
 
-import RPi.GPIO as GPIO 
+import RPi.GPIO as GPIO
 import time
 from serial.tools import list_ports
-from dobot_extensions import Dobot 
-
-available_ports = list_ports.comports()
-port = available_ports[0].device 
-device = Dobot(port=port, verbose=True)
- 
+from dobot_extensions import Dobot
+from motion_class import Motion
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
 
-ir = 17 
+ir = 17
 
 GPIO.setup(ir, GPIO.IN)
 
 
-for i in range(150):
-	if not GPIO.input(ir):
-		device.conveyor_belt_distance(0, False)
-	else: 
-		device.conveyor_belt_distance(50, True)
-	time.sleep(0.05)
+#for i in range(150):
+#	if not GPIO.input(ir):
+#		device.conveyor_belt_distance(0, False)
+#	else:
+#		device.conveyor_belt_distance(50, True)
+#	time.sleep(0.05)
 
-device.close()
 
+m =  Motion()
+m.collect_block()
+time.sleep(2)
+m.disconnect()
