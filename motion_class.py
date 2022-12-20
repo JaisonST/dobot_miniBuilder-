@@ -1,6 +1,6 @@
 from dobot_extensions import Dobot 
 from serial.tools import list_ports
-
+from time import sleep
 
 class Motion():
     UNIT_VAL = 25
@@ -22,6 +22,8 @@ class Motion():
         self.device.move_to(self.home_x, self.home_y, self.home_z - self.UNIT_VAL, self.home_r, wait = True)
         self.device.suck(True)
         self.go_home()
+        sleep(2)
+        self.device.suck(False)
     
     def disconnect(self):
         self.device.close()
