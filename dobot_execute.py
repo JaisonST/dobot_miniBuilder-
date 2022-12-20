@@ -33,8 +33,11 @@ GPIO.setup(ir, GPIO.IN)
 
 
 m =  Motion()
-color = m.collect_block()
-time.sleep(2)
+m.get_location()
+
+for i in range(3):        
+    color = m.collect_block()
+    m.place(i)
 
 print("THISIS MY COLOR SIR", color)
 m.disconnect()

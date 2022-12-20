@@ -2,12 +2,22 @@ from dobot_extensions import Dobot
 from serial.tools import list_ports
 from time import sleep
 import pygame 
-import pygame.camera 
+import pygame.camera
 
+import RPi.GPIO as GPIO 
+
+GPIO.setwarnings(False) 
+GPIO.setmode(GPIO.BCM)
+
+ir = 17
+GPIO.setup(ir, GPIO.IN)
 
 class Motion():
     UNIT_VAL = 25
 
+    def get_ir(self):
+        return not GPIO.input(ir)
+ 
     def get_color(self):
         pygame.init()
         pygame.camera.init()
@@ -17,6 +27,7 @@ class Motion():
         [r, g, b, a] = img.get_at((320, 240))
         vals = [r,g,b]
         index = vals.index(max(vals))
+        cam.stop()
         return index
 
     def __init__(self):
@@ -27,12 +38,19 @@ class Motion():
         self.device = Dobot(port=port, verbose=True)
         (self.home_x, self.home_y, self.home_z, self.home_r, j1, j2, j3, j4) = self.device.pose()
         self.current_pos = {"x":0, "y": 0, "z":4}
+        self.stacks = [0,0,0]
+        self.place_index = [0,0,0] 
     
 
     def go_home(self): 
         self.device.move_to(self.home_x, self.home_y, self.home_z, self.home_r, wait=True)
 
-    def collect_block(self): 
+    def collect_block(self):
+        self.device.conveyor_belt_distance(50, True)
+        while not self.get_ir():
+            sleep(0.025)
+        self.device.conveyor_belt_distance(0, False)
+    
         self.device.move_to(self.home_x, self.home_y, self.home_z - self.UNIT_VAL, self.home_r, wait = True)
         self.device.suck(True)
         self.go_home()
@@ -44,11 +62,42 @@ class Motion():
         sleep(2)
         self.device.move_to(self.home_x - 45, self.home_y + 60, self.home_z + 25, self.home_r, wait = True)
         self.go_home()
-        sleep(2)
-        print("HAAH THIZ ISM", color)
-        self.device.suck(False)
         return(color)
-    
+
+    def stack(self, color):
+        self.device.move_to(self.home_x, self.home_y, self.home_z + self.UNIT_VAL, self.home_r, wait = True)
+        
+        self.device.move_to(self.home_x, self.home_y - (4 * self.UNIT_VAL + 2*((color) * self.UNIT_VAL)), self.home_z + self.UNIT_VAL, self.home_r, wait = True)
+        self.device.move_to(self.home_x, self.home_y - (4 * self.UNIT_VAL + 2*((color) * self.UNIT_VAL)), self.home_z - (self.UNIT_VAL * (3 - self.stacks[color])), self.home_r, wait = True)
+        self.device.suck(False)       
+        self.stacks[color] = self.stacks[color] + 1
+        self.device.move_to(self.home_x, self.home_y - (4 * self.UNIT_VAL + 2*((color) * self.UNIT_VAL)), self.home_z + self.UNIT_VAL, self.home_r, wait = True)
+        self.go_home()
+
+    def place(self, index):
+        new_y = self.home_y + (5 * self.UNIT_VAL) 
+        self.device.move_to(self.home_x, self.home_y, self.home_z + self.UNIT_VAL, self.home_r, wait = True)
+        self.device.move_to(self.home_x - (1 * self.UNIT_VAL), self.home_y - (8 * self.UNIT_VAL), self.home_z + self.UNIT_VAL, self.home_r, wait = True)
+        self.device.move_to(self.home_x - (6 * self.UNIT_VAL), self.home_y - (8 * self.UNIT_VAL), self.home_z + self.UNIT_VAL, self.home_r, wait = True)
+        self.device.move_to(self.home_x - (6 * self.UNIT_VAL), self.home_y - (10 * self.UNIT_VAL), self.home_z + self.UNIT_VAL, self.home_r, wait = True)
+        self.device.move_to(self.home_x - (6 * self.UNIT_VAL + 1*((index) * self.UNIT_VAL)), self.home_y - (10 * self.UNIT_VAL), self.home_z + self.UNIT_VAL, self.home_r, wait = True)
+        self.device.move_to(self.home_x - (6 * self.UNIT_VAL + 1*((index) * self.UNIT_VAL)), self.home_y - (10 * self.UNIT_VAL), self.home_z - (self.UNIT_VAL * (3 - self.place_index[index])), self.home_r, wait = True)
+        self.device.suck(False)
+        self.device.move_to(self.home_x - (6 * self.UNIT_VAL + 1*((index) * self.UNIT_VAL)), self.home_y - (10 * self.UNIT_VAL), self.home_z + self.UNIT_VAL, self.home_r, wait = True)
+        #self.device.move_to(self.home_x + (2 * self.UNIT_VAL + 1.5*((index) * self.UNIT_VAL)), self.home_y - (4 * self.UNIT_VAL), self.home_z - (self.UNIT_VAL * (3 - self.place_index[index])), self.home_r, wait = True)
+        #self.device.move_to(self.home_x , self.home_y, self.home_z + self.UNIT_VAL, self.home_r, wait = True)
+        self.place_index[index]+=1
+        #self.device.move_to(self.home_x + (2 * self.UNIT_VAL + 1.5*((index) * self.UNIT_VAL)), self.home_y - (4 * self.UNIT_VAL), self.home_z + self.UNIT_VAL, self.home_r, wait = True)
+        self.device.move_to(self.home_x - (6 * self.UNIT_VAL), self.home_y - (10 * self.UNIT_VAL), self.home_z + self.UNIT_VAL, self.home_r, wait = True)
+        self.go_home()
+
+    def get_location(self):
+        print(self.device.pose())
+        
     def disconnect(self):
         self.device.close()
     
+
+
+
+
