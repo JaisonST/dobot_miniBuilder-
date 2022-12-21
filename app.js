@@ -19,7 +19,7 @@ app.get('/', (req, res) => {
 app.post('/call_script', (req, res)=> {
   // Code to call script.
   console.log(req.body.input);
-    const py = spawn('python', ['./dobot_execute.py', req.body.input]);
+    const py = spawn('python', ['./dobot_execute.py', JSON.stringify(req.body.input)]);
     // Return prediction on completion of python code 
     py.on('close', (code) => {
         console.log(`Exited with code: ${code}`);
