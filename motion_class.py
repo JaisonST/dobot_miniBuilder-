@@ -51,16 +51,16 @@ class Motion():
             sleep(0.025)
         self.device.conveyor_belt_distance(0, False)
     
-        self.device.move_to(self.home_x, self.home_y, self.home_z - self.UNIT_VAL, self.home_r, wait = True)
+        self.device.move_to(self.home_x, self.home_y, self.home_z - self.UNIT_VAL, self.home_r, wait = False)
         self.device.suck(True)
         self.go_home()
-        self.device.move_to(self.home_x, self.home_y, self.home_z + 25, self.home_r, wait = True)
+        self.device.move_to(self.home_x, self.home_y, self.home_z + 25, self.home_r, wait = False)
 
-        self.device.move_to(self.home_x - 45, self.home_y + 60, self.home_z + 25, self.home_r, wait = True)
-        self.device.move_to(self.home_x - 45, self.home_y + 60, self.home_z - 10, self.home_r, wait = True)
+        self.device.move_to(self.home_x - 45, self.home_y + 60, self.home_z + 25, self.home_r, wait = False)
+        self.device.move_to(self.home_x - 45, self.home_y + 60, self.home_z - 10, self.home_r, wait = False)
         color = self.get_color()
         sleep(2)
-        self.device.move_to(self.home_x - 45, self.home_y + 60, self.home_z + 25, self.home_r, wait = True)
+        self.device.move_to(self.home_x - 45, self.home_y + 60, self.home_z + 25, self.home_r, wait = False)
         self.go_home()
         return(color)
 
