@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Dobot Mini Builder</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <h1>Dobot MiniBuilder</h1>
+
+    <br>
+    <br>
+
+    <!-- Build Section -->
+    <div class="build" id="buildArea">
+        <div class="row">
+            <div class="column"></div>
+            <div class="column"></div>
+            <div class="column"></div>
+        </div>
+        <div class="row">
+            <div class="column"></div>
+            <div class="column"></div>
+            <div class="column"></div>
+        </div>
+        <div class="row">
+            <div class="column"></div>
+            <div class="column"></div>
+            <div class="column"></div>
+        </div>
+    </div>
+
+    
+    <!-- Choose Array -->
+    <div class="chooseArray" id="chooseArray">
+        <div class="contain">
+            <div class="block red" ondragstart="dragstart(event);" id="redBlock" draggable="true"></div>
+            <br>
+            <div class="count" id="count0">5</div>
+        </div>
+        <div class="contain">
+            <div class="block green" ondragstart="dragstart(event);" id="greenBlock" draggable="true"></div>
+            <br>
+            <div class="count" id="count1">5</div>
+            
+        </div>
+        <div class="contain">
+            <div class="block blue" ondragstart="dragstart(event);" id="blueBlock" draggable="true"></div>
+            <br>
+            <div class="count" id="count2">5</div>
+        </div>
+    </div>
+
+    <br>
+
+    <!-- Error -->
+    <div class="error" id="error">
+
+    </div>
+
+    <!-- Actions -->
+    <div class="btns">
+        <button id="clearAll">Clear</button>
+        <button onclick="undo();" id="undoBtn">Undo</button>
+        <button onclick="validateInput();">Submit</button>
+    </div>
+</body>
+<script src="/index.js"></script>
+
+</html>
+<!-- Media queries -->
