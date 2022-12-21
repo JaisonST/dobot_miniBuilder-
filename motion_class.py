@@ -46,7 +46,7 @@ class Motion():
         self.device.move_to(self.home_x, self.home_y, self.home_z, self.home_r, wait=True)
 
     def collect_block(self):
-        self.device.conveyor_belt_distance(50, True)
+        self.device.conveyor_belt_distance(25, True)
         while not self.get_ir():
             sleep(0.025)
         self.device.conveyor_belt_distance(0, False)
@@ -70,24 +70,37 @@ class Motion():
         self.device.move_to(self.home_x, self.home_y - (4 * self.UNIT_VAL + 2*((color) * self.UNIT_VAL)), self.home_z + self.UNIT_VAL, self.home_r, wait = True)
         self.device.move_to(self.home_x, self.home_y - (4 * self.UNIT_VAL + 2*((color) * self.UNIT_VAL)), self.home_z - (self.UNIT_VAL * (3 - self.stacks[color])), self.home_r, wait = True)
         self.device.suck(False)       
-        self.stacks[color] = self.stacks[color] + 1
+        self.stacks[color] += 1 
         self.device.move_to(self.home_x, self.home_y - (4 * self.UNIT_VAL + 2*((color) * self.UNIT_VAL)), self.home_z + self.UNIT_VAL, self.home_r, wait = True)
         self.go_home()
 
+    def unstack(self, color):
+        if self.stacks[color] == 0 :
+            print("ERROR : NO STACK OF THE COLOR")
+            return
+        self.device.move_to(self.home_x, self.home_y, self.home_z + self.UNIT_VAL, self.home_r, wait = True)
+        self.device.move_to(self.home_x, self.home_y - (4 * self.UNIT_VAL + 2*((color) * self.UNIT_VAL)), self.home_z + self.UNIT_VAL, self.home_r, wait = True)
+        self.stacks[color] -= 1 
+        self.device.move_to(self.home_x, self.home_y - (4 * self.UNIT_VAL + 2*((color) * self.UNIT_VAL)), self.home_z - (self.UNIT_VAL * (3 - self.stacks[color])), self.home_r, wait = True)
+        self.device.suck(True)
+        self.device.move_to(self.home_x, self.home_y - (4 * self.UNIT_VAL + 2*((color) * self.UNIT_VAL)), self.home_z + self.UNIT_VAL, self.home_r, wait = True)
+        self.go_home()
+        
     def place(self, index):
         new_y = self.home_y + (5 * self.UNIT_VAL) 
         self.device.move_to(self.home_x, self.home_y, self.home_z + self.UNIT_VAL, self.home_r, wait = True)
         self.device.move_to(self.home_x - (1 * self.UNIT_VAL), self.home_y - (8 * self.UNIT_VAL), self.home_z + self.UNIT_VAL, self.home_r, wait = True)
         self.device.move_to(self.home_x - (6 * self.UNIT_VAL), self.home_y - (8 * self.UNIT_VAL), self.home_z + self.UNIT_VAL, self.home_r, wait = True)
         self.device.move_to(self.home_x - (6 * self.UNIT_VAL), self.home_y - (10 * self.UNIT_VAL), self.home_z + self.UNIT_VAL, self.home_r, wait = True)
-        self.device.move_to(self.home_x - (6 * self.UNIT_VAL + 1*((index) * self.UNIT_VAL)), self.home_y - (10 * self.UNIT_VAL), self.home_z + self.UNIT_VAL, self.home_r, wait = True)
-        self.device.move_to(self.home_x - (6 * self.UNIT_VAL + 1*((index) * self.UNIT_VAL)), self.home_y - (10 * self.UNIT_VAL), self.home_z - (self.UNIT_VAL * (3 - self.place_index[index])), self.home_r, wait = True)
+
+        self.device.move_to(self.home_x - (6 * self.UNIT_VAL + 1.1*((index) * self.UNIT_VAL)), self.home_y - (10 * self.UNIT_VAL), self.home_z + self.UNIT_VAL, self.home_r, wait = True)
+        self.device.move_to(self.home_x - (6 * self.UNIT_VAL + 1.1*((index) * self.UNIT_VAL)), self.home_y - (10 * self.UNIT_VAL), self.home_z - (self.UNIT_VAL * (3 - self.place_index[index])), self.home_r, wait = True)
         self.device.suck(False)
-        self.device.move_to(self.home_x - (6 * self.UNIT_VAL + 1*((index) * self.UNIT_VAL)), self.home_y - (10 * self.UNIT_VAL), self.home_z + self.UNIT_VAL, self.home_r, wait = True)
-        #self.device.move_to(self.home_x + (2 * self.UNIT_VAL + 1.5*((index) * self.UNIT_VAL)), self.home_y - (4 * self.UNIT_VAL), self.home_z - (self.UNIT_VAL * (3 - self.place_index[index])), self.home_r, wait = True)
-        #self.device.move_to(self.home_x , self.home_y, self.home_z + self.UNIT_VAL, self.home_r, wait = True)
+
+        self.device.move_to(self.home_x - (6 * self.UNIT_VAL + 1.1*((index) * self.UNIT_VAL)), self.home_y - (10 * self.UNIT_VAL), self.home_z + self.UNIT_VAL, self.home_r, wait = True)
+
         self.place_index[index]+=1
-        #self.device.move_to(self.home_x + (2 * self.UNIT_VAL + 1.5*((index) * self.UNIT_VAL)), self.home_y - (4 * self.UNIT_VAL), self.home_z + self.UNIT_VAL, self.home_r, wait = True)
+
         self.device.move_to(self.home_x - (6 * self.UNIT_VAL), self.home_y - (10 * self.UNIT_VAL), self.home_z + self.UNIT_VAL, self.home_r, wait = True)
         self.go_home()
 

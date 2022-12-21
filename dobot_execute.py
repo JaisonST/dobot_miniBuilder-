@@ -11,33 +11,18 @@
 #000
 #111
 
-import RPi.GPIO as GPIO
-import time
-from serial.tools import list_ports
-from dobot_extensions import Dobot
+from time import sleep
 from motion_class import Motion
-GPIO.setwarnings(False)
-GPIO.setmode(GPIO.BCM)
-
-ir = 17
-
-GPIO.setup(ir, GPIO.IN)
-
-
-#for i in range(150):
-#	if not GPIO.input(ir):
-#		device.conveyor_belt_distance(0, False)
-#	else:
-#		device.conveyor_belt_distance(50, True)
-#	time.sleep(0.05)
-
 
 m =  Motion()
-m.get_location()
 
-for i in range(3):        
+inputList = [2, 2, 1, 1, 0, 0]
+for i in inputList:        
     color = m.collect_block()
+    m.stack(color)
+
+for i in inputList:
+    m.unstack(i)
     m.place(i)
 
-print("THISIS MY COLOR SIR", color)
 m.disconnect()
