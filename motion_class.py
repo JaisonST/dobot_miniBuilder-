@@ -58,8 +58,9 @@ class Motion():
 
         self.device.move_to(self.home_x - 45, self.home_y + 60, self.home_z + 25, self.home_r, wait = False)
         self.device.move_to(self.home_x - 45, self.home_y + 60, self.home_z - 10, self.home_r, wait = False)
+        sleep(3)
         color = self.get_color()
-        sleep(2)
+        sleep(1)
         self.device.move_to(self.home_x - 45, self.home_y + 60, self.home_z + 25, self.home_r, wait = False)
         self.go_home()
         return(color)
