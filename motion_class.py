@@ -43,7 +43,8 @@ class Motion():
     
 
     def go_home(self): 
-        self.device.move_to(self.home_x, self.home_y, self.home_z, self.home_r, wait=True)
+        self.device.move_to(self.home_x, self.home_y, self.home_z, self.home_r, wait=False)
+        sleep(1)
 
     def collect_block(self):
         self.device.conveyor_belt_distance(25, True)
@@ -56,8 +57,8 @@ class Motion():
         self.go_home()
         self.device.move_to(self.home_x, self.home_y, self.home_z + 25, self.home_r, wait = False)
 
-        self.device.move_to(self.home_x - 45, self.home_y + 60, self.home_z + 25, self.home_r, wait = False)
-        self.device.move_to(self.home_x - 45, self.home_y + 60, self.home_z - 10, self.home_r, wait = False)
+        self.device.move_to(self.home_x - 55, self.home_y + 60, self.home_z + 25, self.home_r, wait = False)
+        self.device.move_to(self.home_x - 55, self.home_y + 60, self.home_z - 10, self.home_r, wait = False)
         sleep(3)
         color = self.get_color()
         sleep(1)
@@ -66,14 +67,14 @@ class Motion():
         return(color)
 
     def stack(self, color):
-        self.device.move_to(self.home_x, self.home_y, self.home_z + self.UNIT_VAL, self.home_r, wait = True)
-        
-        self.device.move_to(self.home_x, self.home_y - (4 * self.UNIT_VAL + 2*((color) * self.UNIT_VAL)), self.home_z + self.UNIT_VAL, self.home_r, wait = True)
-        self.device.move_to(self.home_x, self.home_y - (4 * self.UNIT_VAL + 2*((color) * self.UNIT_VAL)), self.home_z - (self.UNIT_VAL * (3 - self.stacks[color])), self.home_r, wait = True)
-        self.device.suck(False)       
-        self.stacks[color] += 1 
-        self.device.move_to(self.home_x, self.home_y - (4 * self.UNIT_VAL + 2*((color) * self.UNIT_VAL)), self.home_z + self.UNIT_VAL, self.home_r, wait = True)
+        self.device.move_to(self.home_x, self.home_y, self.home_z + self.UNIT_VAL, self.home_r, wait = False)
+        self.device.move_to(self.home_x, self.home_y - (4 * self.UNIT_VAL + 2*((color) * self.UNIT_VAL)), self.home_z + self.UNIT_VAL, self.home_r, wait = False)
+        self.device.move_to(self.home_x, self.home_y - (4 * self.UNIT_VAL + 2*((color) * self.UNIT_VAL)), self.home_z - (self.UNIT_VAL * (3 - self.stacks[color])), self.home_r, wait = False)
+        self.device.suck(False)
+        self.stacks[color] += 1
+        self.device.move_to(self.home_x, self.home_y - (4 * self.UNIT_VAL + 2*((color) * self.UNIT_VAL)), self.home_z + self.UNIT_VAL, self.home_r, wait = False)
         self.go_home()
+        sleep(2)
 
     def unstack(self, color):
         if self.stacks[color] == 0 :

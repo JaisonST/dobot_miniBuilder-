@@ -29,12 +29,12 @@ def unstack_place(color, index, m):
 
 req = [4,4,4]
 
-
-
 v = ast.literal_eval(sys.argv[1])
 
-for i in v:
-    print(i)
+print(v)
+for i in range(0,len(v)):
+    v[i].reverse()    
+print(v)   
 v.insert(0, [4,4,4])
 
 pos1 = 3
@@ -80,17 +80,3 @@ while not done(req):
         
 m.disconnect()
 
-'''
-
-
-inputList = [2, 2, 1, 1, 0, 0]
-for i in inputList:        
-    color = m.collect_block()
-    m.stack(color)
-
-for i in inputList:
-    m.unstack(i)
-    m.place(i)
-
-
-'''
