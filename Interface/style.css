@@ -1,0 +1,88 @@
+* {
+    /* CSS Reset */
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 90vh;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+/* Build section styling */
+.column {
+    float: left;
+    width: 100px;
+    background-color: rgb(246, 246, 246);
+    height: 100px;
+    border: 2px solid black;
+}
+
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* Styling actions */
+.btns{
+    margin-top: 20px;
+    display: flex;
+}
+
+button{
+    width: 7rem;
+    padding: 5px;
+    margin-left: 20px;
+}
+
+/* Block styling */
+.chooseArray {
+    margin-top: 3rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 7rem;
+}
+
+.contain{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.red {
+    background-color: red;
+}
+
+.green {
+    background-color: green;
+}
+
+.blue {
+    background-color: blue;
+}
+
+.block {
+    height: 97px;
+    width: 97px;
+    border: 2px solid black;
+    display: inline-block;
+}
+
+/* Error message */
+.error{
+    color: red;
+}
+
+/* Responsive layout */
+@media screen and (max-width: 600px) {
+    .column {
+      width: 100%;
+    }
+  }
