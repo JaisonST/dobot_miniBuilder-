@@ -68,12 +68,11 @@ function validateInput() {
         row = [];
         colN = 0;
         Array.from(cols).forEach(col => {
-            console.log(col);
             if (!col.hasChildNodes()) {
                 row.push(4);
             }
-            else{
-                if(rowN > 0 && input[rowN-1][colN] == 4){
+            else {
+                if (rowN > 0 && input[rowN - 1][colN] == 4) {
                     error.innerHTML = "Invalid input";
                     return;
                 }
@@ -81,12 +80,18 @@ function validateInput() {
             }
             colN += 1;
         });
-        console.log("Runnnn", rowN)
         input.push(row);
         rowN += 1;
     });
 
-    console.log(input);
+    console.log(input.reverse());
+    console.log("Je", JSON.stringify(input.reverse()));
+
+    fetch('/call_script', { method: 'POST', headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+    }, body: JSON.stringify({"input": input.reverse()})}).then(
+        (response) => response.json()).then((data) => console.log(data));
 }
 
 
@@ -105,7 +110,7 @@ function colorInput(colorClass) {
 function undo() {
     nodeCopy = document.getElementById(blockId - 1);
     nodeCopy.remove();
-    
+
     colorArray[colorInput(nodeCopy.classList[1])] += 1;
     updateId = "count" + colorInput(nodeCopy.classList[1]);
     document.getElementById(updateId).innerHTML = colorArray[colorInput(nodeCopy.classList[1])];
