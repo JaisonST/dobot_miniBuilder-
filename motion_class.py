@@ -51,8 +51,9 @@ class Motion():
         while not self.get_ir():
             sleep(0.025)
         self.device.conveyor_belt_distance(0, False)
-    
+        sleep(1)
         self.device.move_to(self.home_x, self.home_y, self.home_z - self.UNIT_VAL, self.home_r, wait = False)
+        sleep(1)
         self.device.suck(True)
         self.go_home()
         self.device.move_to(self.home_x, self.home_y, self.home_z + 25, self.home_r, wait = False)
@@ -74,8 +75,8 @@ class Motion():
         self.stacks[color] += 1
         self.device.move_to(self.home_x, self.home_y - (4 * self.UNIT_VAL + 2*((color) * self.UNIT_VAL)), self.home_z + self.UNIT_VAL, self.home_r, wait = False)
         self.go_home()
-        sleep(2)
-
+        sleep(4)
+      
     def unstack(self, color):
         if self.stacks[color] == 0 :
             print("ERROR : NO STACK OF THE COLOR")
