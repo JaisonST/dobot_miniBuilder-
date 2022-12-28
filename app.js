@@ -19,8 +19,15 @@ app.get('/', (req, res) => {
 app.post('/call_script', (req, res)=> {
   // Code to call script.
   console.log(req.body.input);
-    const py = spawn('python', ['./dobot_execute.py', JSON.stringify(req.body.input)]);
-    // Return prediction on completion of python code 
+    const py = spawn('python3', ['./dobot_execute.py', JSON.stringify(req.body.input)]);
+    // Return prediction on completion of python code
+    py.stdout.on('data', (data) => {
+	console.log(data.toString());
+    });
+
+   py.stderr.on('data', (data) => {
+	console.log(data.toString());
+   });
     py.on('close', (code) => {
         console.log(`Exited with code: ${code}`);
         if(code > 0){

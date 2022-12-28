@@ -4,8 +4,8 @@ import time
 
 
 available_ports = list_ports.comports()
-print(f'available ports: {[x.device for x in available_ports]}')
-port = available_ports[3].device
+#print(f'available ports: {[x.device for x in available_ports]}')
+port = available_ports[0].device
 
 device = Dobot(port=port, verbose=True)
 

@@ -74,7 +74,7 @@ function validateInput() {
             else {
                 if (rowN > 0 && input[rowN - 1][colN] == 4) {
                     error.innerHTML = "Invalid input";
-                    return;
+                    return ;
                 }
                 row.push(colorInput(col.childNodes[0].classList[1]));
             }
